@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: app
+server:
+  port: 8080
+liquibase:
+  change-log: classpath:db/changelog/db.changelog-master.yaml
+jpa:
+  hibernate:
+    ddl-auto: update
+  show-sql: false
+  open-in-view: false
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+    try-it-out-enabled: true
+  show-actuator: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+

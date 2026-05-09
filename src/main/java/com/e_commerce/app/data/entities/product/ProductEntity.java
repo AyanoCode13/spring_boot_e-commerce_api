@@ -1,5 +1,6 @@
-package com.e_commerce.app.data.entities;
+package com.e_commerce.app.data.entities.product;
 
+import com.e_commerce.app.data.entities.category.CategoryEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -43,4 +44,8 @@ public class ProductEntity {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private CategoryEntity category;
 }

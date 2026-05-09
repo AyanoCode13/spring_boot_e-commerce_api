@@ -7,21 +7,14 @@ services:
       POSTGRES_DB: yourdb
       POSTGRES_USER: youruser
       POSTGRES_PASSWORD: yourpass
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U youruser"]
-      interval: 5s
-      retries: 5
 
   elasticsearch:
     image: elasticsearch:9.4.0
     ports:
       - "9200:9200"
-    mem_limit: 1g
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
-      - xpack.security.http.ssl.enabled=false
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
 
   redis:
     image: redis:latest

@@ -1,4 +1,4 @@
-package com.e_commerce.app.data.entities;
+package com.e_commerce.app.data.entities.product;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;

@@ -4,7 +4,7 @@ package com.e_commerce.app.controllers;
 import com.e_commerce.app.data.dto.product.ProductFilterRequest;
 import com.e_commerce.app.data.dto.product.ProductRequest;
 import com.e_commerce.app.data.dto.product.ProductResponse;
-import com.e_commerce.app.data.entities.ProductEntity;
+import com.e_commerce.app.data.entities.product.ProductEntity;
 import com.e_commerce.app.data.mappers.EntityMapper;
 import com.e_commerce.app.services.product.ProductService;
 import io.swagger.v3.oas.annotations.Operation;

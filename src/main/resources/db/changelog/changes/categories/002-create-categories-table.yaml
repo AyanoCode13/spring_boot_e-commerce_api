@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-create-categories-table
+      author: andrew
+      changes:
+        - createTable:
+            tableName: categories
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: description
+                  type: VARCHAR(500)
+              - column:
+                  name: parent_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_category_parent
+                    references: categories(id)

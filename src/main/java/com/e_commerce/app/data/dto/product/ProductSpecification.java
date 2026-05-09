@@ -1,8 +1,7 @@
 package com.e_commerce.app.data.dto.product;
 
 
-import com.e_commerce.app.data.entities.ProductEntity;
-import jakarta.persistence.criteria.JoinType;
+import com.e_commerce.app.data.entities.product.ProductEntity;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 

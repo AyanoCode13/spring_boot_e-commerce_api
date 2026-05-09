@@ -1,7 +1,7 @@
-package com.e_commerce.app.data.repositories;
+package com.e_commerce.app.data.repositories.product;
 
 
-import com.e_commerce.app.data.entities.ProductEntity;
+import com.e_commerce.app.data.entities.product.ProductEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

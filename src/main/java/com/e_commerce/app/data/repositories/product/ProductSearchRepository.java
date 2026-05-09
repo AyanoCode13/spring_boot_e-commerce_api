@@ -1,7 +1,7 @@
-package com.e_commerce.app.data.repositories;
+package com.e_commerce.app.data.repositories.product;
 
 
-import com.e_commerce.app.data.entities.ProductDocument;
+import com.e_commerce.app.data.entities.product.ProductDocument;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 public interface ProductSearchRepository

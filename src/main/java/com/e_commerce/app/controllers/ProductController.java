@@ -24,14 +24,18 @@ public class ProductController {
     private final ProductService productService;
     private final EntityMapper mapper;
 
-
     // ── Filter via DB Specification ────────────────────────────────────────
     @Operation(summary = "Filter products from database",
             description = "Supports filtering by keyword, category, price range, and stock")
     @GetMapping
     public ResponseEntity<Page<ProductResponse>> filter(ProductFilterRequest filter) {
+
         return ResponseEntity.ok(
                 productService.filter(filter).map(mapper::toProductResponse));
+    }
+    @GetMapping("/search")
+    public ResponseEntity<?> search(ProductFilterRequest filter) {
+        return ResponseEntity.ok(productService.search(filter));
     }
 
     @Operation(summary = "Get product by ID")

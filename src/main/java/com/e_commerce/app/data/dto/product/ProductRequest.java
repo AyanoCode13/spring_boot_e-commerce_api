@@ -28,6 +28,4 @@ public class ProductRequest {
     private Integer stockQuantity;
 
     private String imageUrl;
-
-
 }

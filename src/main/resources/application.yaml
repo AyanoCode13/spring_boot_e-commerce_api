@@ -5,6 +5,17 @@ server:
   port: 8080
 liquibase:
   change-log: classpath:db/changelog/db.changelog-master.yaml
+data:
+  elasticsearch:
+    repositories:
+      uris: http://localhost:9200
+autoconfigure:
+  exclude:
+    - org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration
+    - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchClientAutoConfiguration
+    - org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration  # ← add this
+
+
 jpa:
   hibernate:
     ddl-auto: update

@@ -2,6 +2,7 @@ package com.e_commerce.app.services.product;
 
 import com.e_commerce.app.data.dto.product.ProductFilterRequest;
 import com.e_commerce.app.data.dto.product.ProductSpecification;
+import com.e_commerce.app.data.entities.ProductDocument;
 import com.e_commerce.app.data.entities.ProductEntity;
 import com.e_commerce.app.data.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductSearchService productSearchService;
+
     @Transactional
     public ProductEntity create(ProductEntity product) {
         ProductEntity saved = productRepository.save(product);
-
+        productSearchService.indexProduct(saved);
         return saved;
     }
 
@@ -30,6 +33,11 @@ public class ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Product not found with id: " + id));
     }
+    @Transactional(readOnly = true)
+    public Page<ProductDocument> search(ProductFilterRequest filter) {
+        return productSearchService.search(filter);
+    }
+
     @Transactional(readOnly = true)
     public Page<ProductEntity> filter(ProductFilterRequest filter) {
         Pageable pageable = PageRequest.of(
@@ -50,15 +58,15 @@ public class ProductService {
         existing.setPrice(updated.getPrice());
         existing.setStockQuantity(updated.getStockQuantity());
         existing.setImageUrl(updated.getImageUrl());
-
-
         ProductEntity saved = productRepository.save(existing);
+        productSearchService.indexProduct(saved);
         return saved;
     }
 
     @Transactional
     public void delete(Long id) {
         productRepository.deleteById(id);
+        productSearchService.removeProduct(id);
 
     }
 }

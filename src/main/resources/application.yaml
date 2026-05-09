@@ -1,26 +1,44 @@
 spring:
   application:
     name: app
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:yourdb}
+    username: ${DB_USER:youruser}
+    password: ${DB_PASS:yourpass}
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: 6379
+    elasticsearch:
+      repositories:
+        enabled: true
+
+  elasticsearch:
+    uris: http://${ES_HOST:localhost}:9200
+
+  cache:
+    type: redis
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: false
+
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration
+      - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchClientAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration
+
 server:
   port: 8080
-liquibase:
-  change-log: classpath:db/changelog/db.changelog-master.yaml
-data:
-  elasticsearch:
-    repositories:
-      uris: http://localhost:9200
-autoconfigure:
-  exclude:
-    - org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration
-    - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchClientAutoConfiguration
-    - org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration  # ← add this
 
-
-jpa:
-  hibernate:
-    ddl-auto: update
-  show-sql: false
-  open-in-view: false
 springdoc:
   api-docs:
     path: /v3/api-docs
@@ -30,6 +48,7 @@ springdoc:
     tags-sorter: alpha
     try-it-out-enabled: true
   show-actuator: false
+
 management:
   endpoints:
     web:
@@ -38,4 +57,3 @@ management:
   endpoint:
     health:
       show-details: when-authorized
-

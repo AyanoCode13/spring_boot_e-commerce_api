@@ -1,11 +1,15 @@
 package com.e_commerce.app.services.product;
 
+import com.e_commerce.app.config.cache.CacheConstants;
 import com.e_commerce.app.data.dto.product.ProductFilterRequest;
 import com.e_commerce.app.data.dto.product.ProductSpecification;
 import com.e_commerce.app.data.entities.ProductDocument;
 import com.e_commerce.app.data.entities.ProductEntity;
 import com.e_commerce.app.data.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,19 +24,24 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductSearchService productSearchService;
 
+    @Caching(evict = {
+            @CacheEvict(value = CacheConstants.PRODUCTS, allEntries = true)
+    })
     @Transactional
     public ProductEntity create(ProductEntity product) {
         ProductEntity saved = productRepository.save(product);
         productSearchService.indexProduct(saved);
         return saved;
     }
-
+    @Cacheable(value = CacheConstants.PRODUCT, key = "#id")
     @Transactional(readOnly = true)
     public ProductEntity getById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Product not found with id: " + id));
     }
+
+
     @Transactional(readOnly = true)
     public Page<ProductDocument> search(ProductFilterRequest filter) {
         return productSearchService.search(filter);
@@ -48,6 +57,12 @@ public class ProductService {
         return productRepository.findAll(
                 ProductSpecification.withFilters(filter), pageable);
     }
+
+    // ── Update — evict both single product and list caches ────────────────
+    @Caching(evict = {
+            @CacheEvict(value = CacheConstants.PRODUCT, key = "#id"),
+            @CacheEvict(value = CacheConstants.PRODUCTS, allEntries = true)
+    })
     public ProductEntity update(Long id, ProductEntity updated) {
         ProductEntity existing = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(

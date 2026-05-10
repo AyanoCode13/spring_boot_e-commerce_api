@@ -1,4 +1,4 @@
-package com.e_commerce.app.services.product;
+package com.e_commerce.app.data.services.product;
 
 import com.e_commerce.app.config.cache.CacheConstants;
 import com.e_commerce.app.data.dto.product.ProductFilterRequest;
@@ -41,7 +41,7 @@ public class ProductService {
                         "Product not found with id: " + id));
     }
 
-
+    @Cacheable(keyGenerator = "productKeyGenerator", value = "products")
     @Transactional(readOnly = true)
     public Page<ProductDocument> search(ProductFilterRequest filter) {
         return productSearchService.search(filter);

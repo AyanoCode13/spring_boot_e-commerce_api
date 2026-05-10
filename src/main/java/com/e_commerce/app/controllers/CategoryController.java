@@ -4,7 +4,7 @@ package com.e_commerce.app.controllers;
 import com.e_commerce.app.data.dto.categories.CategoryResponse;
 import com.e_commerce.app.data.entities.category.CategoryEntity;
 import com.e_commerce.app.data.mappers.EntityMapper;
-import com.e_commerce.app.services.category.CategoryService;
+import com.e_commerce.app.data.services.category.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +23,7 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<List<CategoryResponse>> getAll() {
         return ResponseEntity.ok(
-                categoryService.getAllTopLevel().stream()
+                categoryService.getMainCategories().stream()
                         .map(mapper::toCategoryResponse)
                         .toList()
         );

@@ -1,4 +1,4 @@
-package com.e_commerce.app.services.product;
+package com.e_commerce.app.data.services.product;
 
 import co.elastic.clients.elasticsearch._types.SortOrder;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
@@ -8,6 +8,7 @@ import com.e_commerce.app.data.entities.product.ProductEntity;
 import com.e_commerce.app.data.repositories.product.ProductSearchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -42,6 +43,7 @@ public class ProductSearchService {
     public void removeProduct(Long productId) {
         productSearchRepository.deleteById(productId);
     }
+
 
     public Page<ProductDocument> search(ProductFilterRequest filter) {
 

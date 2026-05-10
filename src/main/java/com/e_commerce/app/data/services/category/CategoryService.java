@@ -1,4 +1,4 @@
-package com.e_commerce.app.services.category;
+package com.e_commerce.app.data.services.category;
 
 
 import com.e_commerce.app.config.cache.CacheConstants;
@@ -24,7 +24,7 @@ public class CategoryService {
     // ── Get all top-level categories — cached ──────────────────────────────
     @Cacheable(value = CacheConstants.CATEGORIES)
     @Transactional(readOnly = true)
-    public List<CategoryEntity> getAllTopLevel() {
+    public List<CategoryEntity> getMainCategories() {
         return categoryRepository.findByParentIsNull();
     }
 

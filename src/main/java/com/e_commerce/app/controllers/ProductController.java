@@ -6,7 +6,7 @@ import com.e_commerce.app.data.dto.product.ProductRequest;
 import com.e_commerce.app.data.dto.product.ProductResponse;
 import com.e_commerce.app.data.entities.product.ProductEntity;
 import com.e_commerce.app.data.mappers.EntityMapper;
-import com.e_commerce.app.services.product.ProductService;
+import com.e_commerce.app.data.services.product.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;

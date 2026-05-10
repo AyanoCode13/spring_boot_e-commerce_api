@@ -1,11 +1,20 @@
 package com.e_commerce.app.data.mappers;
 
+import com.e_commerce.app.data.dto.cart.CartItemResponse;
+import com.e_commerce.app.data.dto.cart.CartResponse;
 import com.e_commerce.app.data.dto.categories.CategoryResponse;
+import com.e_commerce.app.data.dto.order.OrderItemResponse;
+import com.e_commerce.app.data.dto.order.OrderResponse;
 import com.e_commerce.app.data.dto.product.ProductResponse;
+import com.e_commerce.app.data.entities.cart.CartEntity;
+import com.e_commerce.app.data.entities.cart.CartItemEntity;
 import com.e_commerce.app.data.entities.category.CategoryEntity;
+import com.e_commerce.app.data.entities.order.OrderEntity;
+import com.e_commerce.app.data.entities.order.OrderItemEntity;
 import com.e_commerce.app.data.entities.product.ProductEntity;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Component
@@ -39,7 +48,66 @@ public class EntityMapper {
                         : List.of())
                 .build();
     }
+    // ── Cart ───────────────────────────────────────────────────────────────
+    public CartResponse toCartResponse(CartEntity cart) {
+        List<CartItemResponse> items = cart.getItems().stream()
+                .map(this::toCartItemResponse)
+                .toList();
 
+        BigDecimal total = items.stream()
+                .map(CartItemResponse::getSubtotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        int totalItems = items.stream()
+                .mapToInt(CartItemResponse::getQuantity)
+                .sum();
+
+        return CartResponse.builder()
+                .id(cart.getId())
+                .items(items)
+                .totalPrice(total)
+                .totalItems(totalItems)
+                .build();
+    }
+
+    public CartItemResponse toCartItemResponse(CartItemEntity item) {
+        BigDecimal subtotal = item.getProduct().getPrice()
+                .multiply(BigDecimal.valueOf(item.getQuantity()));
+        return CartItemResponse.builder()
+                .id(item.getId())
+                .productId(item.getProduct().getId())
+                .productName(item.getProduct().getName())
+                .imageUrl(item.getProduct().getImageUrl())
+                .price(item.getProduct().getPrice())
+                .quantity(item.getQuantity())
+                .subtotal(subtotal)
+                .build();
+    }
+
+    // ── Order ──────────────────────────────────────────────────────────────
+    public OrderResponse toOrderResponse(OrderEntity order) {
+        List<OrderItemResponse> items = order.getItems().stream()
+                .map(this::toOrderItemResponse)
+                .toList();
+        return OrderResponse.builder()
+                .id(order.getId())
+                .status(order.getStatus())
+                .totalAmount(order.getTotalAmount())
+                .shippingAddress(order.getShippingAddress())
+                .items(items)
+                .createdAt(order.getCreatedAt())
+                .build();
+    }
+    public OrderItemResponse toOrderItemResponse(OrderItemEntity item) {
+        return OrderItemResponse.builder()
+                .id(item.getId())
+                .productId(item.getProduct().getId())
+                .productName(item.getProduct().getName())
+                .quantity(item.getQuantity())
+                .priceAtPurchase(item.getPriceAtPurchase())
+                .subtotal(item.getPriceAtPurchase()
+                        .multiply(BigDecimal.valueOf(item.getQuantity())))
+                .build();
+    }
 
 }

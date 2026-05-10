@@ -48,6 +48,11 @@ springdoc:
     tags-sorter: alpha
     try-it-out-enabled: true
   show-actuator: false
+security:              # ← root level, not spring.security
+  jwt:
+    secret-key: mUGb5N9TSTM0tQD8fzwYnuf8dAtW3n/g+MoKbH+ztDY=
+    access-token-expiration: 900000
+    refresh-token-expiration: 604800000
 
 management:
   endpoints:

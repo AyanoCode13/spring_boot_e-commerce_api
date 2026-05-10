@@ -41,7 +41,7 @@ public class ProductService {
                         "Product not found with id: " + id));
     }
 
-    @Cacheable(keyGenerator = "productKeyGenerator", value = "products")
+
     @Transactional(readOnly = true)
     public Page<ProductDocument> search(ProductFilterRequest filter) {
         return productSearchService.search(filter);

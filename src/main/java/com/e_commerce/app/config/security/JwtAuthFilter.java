@@ -51,11 +51,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
 
-        final String jwt = authHeader.substring(7);
 
 
         try {
-            final String email = jwtService.extractUsername(jwt);
+            final String email = jwtService.extractUsername(token);
             log.debug("JWT filter - extracted email: {}", email);
 
             if (email == null) {
@@ -69,9 +68,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
 
             // Reject refresh tokens used as access tokens
-            if (jwtService.isRefreshToken(jwt)) {
+            if (jwtService.isRefreshToken(token)) {
                 log.warn("JWT filter - refresh token used as access token for: {}", email);
-                filterChain.doFilter(request, response);
+                log.debug("isRefreshToken: {}", jwtService.isRefreshToken(token));
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"message\":\"Invalid token type\",\"status\":401}");
+                response.getWriter().flush();
                 return;
             }
 
@@ -87,8 +90,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     return;
                 }
 
-                if (jwtService.isTokenValid(jwt, userDetails)) {
+                if (jwtService.isTokenValid(token, userDetails)) {
                     log.debug("JWT filter - token valid for: {}", email);
+                    log.debug("isTokenValid: {}", jwtService.isTokenValid(token, userDetails));
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(
                                     userDetails,
@@ -104,7 +108,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
         } catch (io.jsonwebtoken.ExpiredJwtException e) {
-            log.warn("JWT filter - token expired: {}", e.getMessage());
+            log.warn("JWT filter - token expired");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"message\":\"Token expired\",\"status\":401}");
+            response.getWriter().flush();
+            return;
         } catch (io.jsonwebtoken.security.SignatureException e) {
             log.error("JWT filter - invalid signature: {}", e.getMessage());
         } catch (io.jsonwebtoken.MalformedJwtException e) {
@@ -120,7 +129,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String header = request.getHeader("Authorization");
 
         if (header != null && header.startsWith("Bearer ")) {
-            return header.substring(7); // strips "Bearer " prefix
+            return header.substring(7); // REMOVE "Bearer "
         }
 
         return null;

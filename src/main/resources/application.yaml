@@ -5,11 +5,9 @@ spring:
     url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:yourdb}
     username: ${DB_USER:youruser}
     password: ${DB_PASS:yourpass}
-
   liquibase:
     drop-first: true
     change-log: classpath:db/changelog/db.changelog-master.yaml
-
   data:
     redis:
       host: ${REDIS_HOST:localhost}
@@ -23,12 +21,15 @@ spring:
 
   cache:
     type: redis
+    redis:
+      enable-statistics: false
+
 
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: false
-    open-in-view: false
+    show-sql: true
+    open-in-view: true
 
   autoconfigure:
     exclude:
@@ -38,8 +39,8 @@ spring:
   mail:
     host: sandbox.smtp.mailtrap.io
     port: 2525
-    username: 6c1a3f3038396b
-    password: 4ea420ec71d4cc
+    username: ${STMP_MAIL_USERNAME}
+    password: ${STMP_MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -61,13 +62,15 @@ springdoc:
   show-actuator: false
 security:              # ← root level, not spring.security
   jwt:
-    secret-key: mUGb5N9TSTM0tQD8fzwYnuf8dAtW3n/g+MoKbH+ztDY=
-    access-token-expiration: 900000
-    refresh-token-expiration: 604800000
+    secret-key: ${JWT_SECRET}
+    access-token-expiration: ${JWT_ACCESS_TOKEN_EXPIRATION:900000}
+    refresh-token-expiration: ${JWT_REFRESH_TOKEN_EXPIRATION:604800000}
 logging:
   level:
     org.springframework.security: DEBUG
     com.e_commerce: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.springframework.jdbc: DEBUG
 management:
   endpoints:
     web:

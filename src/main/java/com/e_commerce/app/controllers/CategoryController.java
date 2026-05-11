@@ -2,9 +2,11 @@ package com.e_commerce.app.controllers;
 
 
 import com.e_commerce.app.data.dto.categories.CategoryResponse;
+import com.e_commerce.app.data.dto.categories.CreateCategoryRequest;
 import com.e_commerce.app.data.entities.category.CategoryEntity;
 import com.e_commerce.app.data.mappers.EntityMapper;
 import com.e_commerce.app.data.services.category.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +21,12 @@ public class CategoryController {
 
     private final CategoryService categoryService;
     private final EntityMapper mapper;
+    @GetMapping("/add")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok(
+              "Hello"
+        );
+    }
 
     @GetMapping
     public ResponseEntity<List<CategoryResponse>> getAll() {
@@ -36,13 +44,15 @@ public class CategoryController {
         );
     }
 
-    @PostMapping
+    @PostMapping("/")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<CategoryResponse> create(
-            @RequestBody CategoryEntity category) {
-        return ResponseEntity.ok(
-                mapper.toCategoryResponse(categoryService.create(category))
-        );
+            @Valid @RequestBody CreateCategoryRequest request) {
+        CategoryEntity entity = new CategoryEntity();
+        entity.setName(request.name());
+        entity.setDescription(request.description());
+        mapper.toCategoryResponse(categoryService.create(entity));
+        return ResponseEntity.ok(mapper.toCategoryResponse(entity));
     }
 
     @DeleteMapping("/{id}")

@@ -1,7 +1,9 @@
 package com.e_commerce.app.data.entities.category;
 
 import com.e_commerce.app.data.entities.product.ProductEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,9 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CategoryEntity implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
+public class CategoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,11 +33,12 @@ public class CategoryEntity implements Serializable {
     @JoinColumn(name = "parent_id")
     private CategoryEntity parent;
 
-    @JsonIgnore
+
+    @JsonManagedReference
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<CategoryEntity> subCategories;
 
-    @JsonIgnore
+    @JsonBackReference
     @OneToMany(mappedBy = "category")
     private List<ProductEntity> products;
 }

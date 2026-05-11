@@ -23,6 +23,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     public final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
@@ -35,16 +36,12 @@ public class AuthService {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.ROLE_CUSTOMER)
+                .role(Role.ROLE_ADMIN)
                 .build();
 
         userRepository.save(user);
 
-        UserDetails userDetails = org.springframework.security.core.userdetails.User
-                .withUsername(user.getEmail())
-                .password(user.getPassword())
-                .authorities(user.getRole().name())
-                .build();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
 
         return AuthResponse.builder()
                 .accessToken(jwtService.generateAccessToken(userDetails))
@@ -63,14 +60,8 @@ public class AuthService {
                 )
         );
 
-        UserDetails userDetails = userRepository.findByEmail(request.getEmail())
-                .map(user -> org.springframework.security.core.userdetails.User
-                        .withUsername(user.getEmail())
-                        .password(user.getPassword())
-                        .authorities(user.getRole().name())
-                        .build()
-                )
-                .orElseThrow();
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
 
         return AuthResponse.builder()
                 .accessToken(jwtService.generateAccessToken(userDetails))
@@ -79,4 +70,5 @@ public class AuthService {
                 .expiresIn(jwtService.getAccessTokenExpiration())
                 .build();
     }
+
 }

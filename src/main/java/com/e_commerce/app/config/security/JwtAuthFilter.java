@@ -43,8 +43,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        if (token != null && blacklistService.isBlacklisted(token)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"message\":\"Token has been invalidated\",\"status\":401}");
+            response.getWriter().flush();
+            return;
+        }
 
         final String jwt = authHeader.substring(7);
+
 
         try {
             final String email = jwtService.extractUsername(jwt);
@@ -116,5 +124,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         return null;
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return path.equals("/api/auth/login")
+                || path.equals("/api/auth/register")
+                || path.equals("/api/auth/logout");
     }
 }

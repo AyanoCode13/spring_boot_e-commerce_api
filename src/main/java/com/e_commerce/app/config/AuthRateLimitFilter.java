@@ -31,7 +31,7 @@ public class AuthRateLimitFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
 
         // Apply only to auth endpoints
-        if (!path.startsWith("/auth")) {
+        if (!path.startsWith("/api/auth")) {
             filterChain.doFilter(request, response);
             return;
         }

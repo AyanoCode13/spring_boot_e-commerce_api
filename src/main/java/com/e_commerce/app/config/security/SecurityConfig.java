@@ -36,6 +36,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .logout(logout -> logout
+                        .logoutUrl("/logout")                     // POST to this URL
+                        .logoutSuccessUrl("/login?logout=true")   // redirect after logout
+                        .invalidateHttpSession(true)              // destroy session
+                        .deleteCookies("JSESSIONID")              // clear cookies
+                        .clearAuthentication(true)
+                )
                 .addFilterBefore(authRateLimitFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))

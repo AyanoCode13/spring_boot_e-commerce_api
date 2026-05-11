@@ -27,7 +27,7 @@ public class AuthService {
     @Transactional
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new BadRequestException("Email already registered"); // ✅ 400 not 500
+            throw new BadRequestException("Email already registered");
         }
 
         UserEntity user = UserEntity.builder()
@@ -49,7 +49,7 @@ public class AuthService {
         return AuthResponse.builder()
                 .accessToken(jwtService.generateAccessToken(userDetails))
                 .refreshToken(jwtService.generateRefreshToken(userDetails))
-                .tokenType("Bearer")  // ✅ explicitly set
+                .tokenType("Bearer")
                 .expiresIn(jwtService.getAccessTokenExpiration())
                 .build();
     }
@@ -75,7 +75,7 @@ public class AuthService {
         return AuthResponse.builder()
                 .accessToken(jwtService.generateAccessToken(userDetails))
                 .refreshToken(jwtService.generateRefreshToken(userDetails))
-                .tokenType("Bearer")  // ✅ explicitly set
+                .tokenType("Bearer")
                 .expiresIn(jwtService.getAccessTokenExpiration())
                 .build();
     }

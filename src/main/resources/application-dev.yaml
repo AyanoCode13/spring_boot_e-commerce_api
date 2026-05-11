@@ -1,6 +1,7 @@
 spring:
   application:
     name: app
+  #Data
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:5432/${DB_NAME:yourdb}
     username: ${DB_USER:youruser}
@@ -36,32 +37,5 @@ spring:
       - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchClientAutoConfiguration
       - org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchRepositoriesAutoConfiguration
 
-server:
-  port: 8080
 
-springdoc:
-  api-docs:
-    path: /v3/api-docs
-  swagger-ui:
-    path: /swagger-ui.html
-    operations-sorter: method
-    tags-sorter: alpha
-    try-it-out-enabled: true
-  show-actuator: false
-security:              # ← root level, not spring.security
-  jwt:
-    secret-key: mUGb5N9TSTM0tQD8fzwYnuf8dAtW3n/g+MoKbH+ztDY=
-    access-token-expiration: 900000
-    refresh-token-expiration: 604800000
-logging:
-  level:
-    org.springframework.security: DEBUG
-    com.e_commerce: DEBUG
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health, info, metrics
-  endpoint:
-    health:
-      show-details: when-authorized
+

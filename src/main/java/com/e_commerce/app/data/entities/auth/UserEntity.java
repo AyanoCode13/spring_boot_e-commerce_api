@@ -1,4 +1,4 @@
-package com.e_commerce.app.data.entities;
+package com.e_commerce.app.data.entities.auth;
 
 
 import com.e_commerce.app.data.entities.cart.CartEntity;

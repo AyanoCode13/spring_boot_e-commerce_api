@@ -5,19 +5,17 @@ import com.e_commerce.app.data.dto.auth.AuthResponse;
 import com.e_commerce.app.data.dto.auth.LoginRequest;
 import com.e_commerce.app.data.dto.auth.RegisterRequest;
 import com.e_commerce.app.data.services.auth.AuthService;
+import com.e_commerce.app.data.services.auth.PasswordResetService;
 import com.e_commerce.app.data.services.auth.TokenBlacklistService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +29,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final TokenBlacklistService blacklistService;
+
 
     @Operation(summary = "Register a new customer account")
     @ApiResponses({

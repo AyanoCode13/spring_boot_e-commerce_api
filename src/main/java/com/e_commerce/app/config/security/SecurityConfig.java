@@ -1,7 +1,5 @@
 package com.e_commerce.app.config.security;
 
-import com.e_commerce.app.config.AuthRateLimitFilter;
-import com.e_commerce.app.config.security.JwtAuthFilter;
 import com.e_commerce.app.data.services.auth.UserDetailsServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

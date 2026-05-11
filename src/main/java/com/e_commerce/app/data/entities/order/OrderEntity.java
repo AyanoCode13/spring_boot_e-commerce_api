@@ -1,6 +1,6 @@
 package com.e_commerce.app.data.entities.order;
 
-import com.e_commerce.app.data.entities.UserEntity;
+import com.e_commerce.app.data.entities.auth.UserEntity;
 import com.e_commerce.app.data.enums.OrderStatus;
 import com.e_commerce.app.data.enums.PaymentStatus;
 import jakarta.persistence.*;

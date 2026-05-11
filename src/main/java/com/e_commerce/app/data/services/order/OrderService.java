@@ -2,13 +2,13 @@ package com.e_commerce.app.data.services.order;
 
 import com.e_commerce.app.config.exceptions.BadRequestException;
 import com.e_commerce.app.data.dto.order.OrderRequest;
-import com.e_commerce.app.data.entities.UserEntity;
+import com.e_commerce.app.data.entities.auth.UserEntity;
 import com.e_commerce.app.data.entities.cart.CartEntity;
 import com.e_commerce.app.data.entities.order.OrderEntity;
 
 import com.e_commerce.app.data.entities.order.OrderItemEntity;
 import com.e_commerce.app.data.enums.OrderStatus;
-import com.e_commerce.app.data.repositories.UserRepository;
+import com.e_commerce.app.data.repositories.auth.UserRepository;
 import com.e_commerce.app.data.repositories.order.OrderRepository;
 import com.e_commerce.app.data.services.cart.CartService;
 import lombok.RequiredArgsConstructor;

@@ -2,11 +2,11 @@ package com.e_commerce.app.data.services.cart;
 
 import com.e_commerce.app.config.exceptions.BadRequestException;
 import com.e_commerce.app.data.dto.cart.CartItemRequest;
-import com.e_commerce.app.data.entities.UserEntity;
+import com.e_commerce.app.data.entities.auth.UserEntity;
 import com.e_commerce.app.data.entities.cart.CartEntity;
 import com.e_commerce.app.data.entities.cart.CartItemEntity;
 import com.e_commerce.app.data.entities.product.ProductEntity;
-import com.e_commerce.app.data.repositories.UserRepository;
+import com.e_commerce.app.data.repositories.auth.UserRepository;
 import com.e_commerce.app.data.repositories.cart.CartItemRepository;
 import com.e_commerce.app.data.repositories.cart.CartRepository;
 import com.e_commerce.app.data.repositories.product.ProductRepository;

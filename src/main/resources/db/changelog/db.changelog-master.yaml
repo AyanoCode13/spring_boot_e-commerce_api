@@ -2,4 +2,16 @@ databaseChangeLog:
   - includeAll:
       path: db/changelog/changes/products/
       relativeToChangelogFile: false
+  - includeAll:
+      path: db/changelog/changes/categories/
+      relativeToChangelogFile: false
+  - includeAll:
+      path: db/changelog/changes/auth/
+      relativeToChangelogFile: false
+  - includeAll:
+      path: db/changelog/changes/orders/
+      relativeToChangelogFile: false
+  - includeAll:
+      path: db/changelog/changes/carts/
+      relativeToChangelogFile: false
 

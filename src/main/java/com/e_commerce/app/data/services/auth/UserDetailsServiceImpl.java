@@ -1,6 +1,6 @@
 package com.e_commerce.app.data.services.auth;
 
-import com.e_commerce.app.data.repositories.UserRepository;
+import com.e_commerce.app.data.repositories.auth.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

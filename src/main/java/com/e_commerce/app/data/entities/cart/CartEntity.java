@@ -1,7 +1,7 @@
 package com.e_commerce.app.data.entities.cart;
 
 
-import com.e_commerce.app.data.entities.UserEntity;
+import com.e_commerce.app.data.entities.auth.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

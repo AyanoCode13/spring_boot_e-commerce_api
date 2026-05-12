@@ -2,7 +2,7 @@ package com.e_commerce.app.config.elasticsearch;
 
 
 import com.e_commerce.app.data.repositories.product.ProductRepository;
-import com.e_commerce.app.data.services.product.ProductSearchService;
+import com.e_commerce.app.business.services.product.ProductSearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;

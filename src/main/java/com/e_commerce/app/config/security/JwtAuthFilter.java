@@ -1,9 +1,9 @@
 package com.e_commerce.app.config.security;
 
 
-import com.e_commerce.app.data.services.auth.JwtService;
-import com.e_commerce.app.data.services.auth.TokenBlacklistService;
-import com.e_commerce.app.data.services.auth.UserDetailsServiceImpl;
+import com.e_commerce.app.business.services.auth.JwtService;
+import com.e_commerce.app.business.services.auth.TokenBlacklistService;
+import com.e_commerce.app.business.services.auth.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Base64;
 
 @Slf4j
 @Component
@@ -140,6 +141,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
         return path.equals("/api/auth/login")
                 || path.equals("/api/auth/register")
-                || path.equals("/api/auth/logout");
+                || path.equals("/api/auth/logout")
+                || path.equals("/api/auth/google");
     }
+
 }

@@ -1,7 +1,7 @@
 package com.e_commerce.app.data.repositories.auth;
 
 
-import com.e_commerce.app.data.entities.auth.UserEntity;
+import com.e_commerce.app.domain.entities.auth.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

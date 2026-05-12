@@ -1,7 +1,7 @@
 package com.e_commerce.app.data.repositories.order;
 
 
-import com.e_commerce.app.data.entities.order.OrderItemEntity;
+import com.e_commerce.app.domain.entities.order.OrderItemEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

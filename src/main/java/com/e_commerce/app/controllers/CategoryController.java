@@ -1,11 +1,11 @@
 package com.e_commerce.app.controllers;
 
 
-import com.e_commerce.app.data.dto.categories.CategoryResponse;
-import com.e_commerce.app.data.dto.categories.CreateCategoryRequest;
-import com.e_commerce.app.data.entities.category.CategoryEntity;
+import com.e_commerce.app.business.dto.categories.CategoryResponse;
+import com.e_commerce.app.business.dto.categories.CategoryRequest;
+import com.e_commerce.app.domain.entities.category.CategoryEntity;
 import com.e_commerce.app.data.mappers.EntityMapper;
-import com.e_commerce.app.data.services.category.CategoryService;
+import com.e_commerce.app.business.services.category.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +47,7 @@ public class CategoryController {
     @PostMapping("/")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<CategoryResponse> create(
-            @Valid @RequestBody CreateCategoryRequest request) {
+            @Valid @RequestBody CategoryRequest request) {
         CategoryEntity entity = new CategoryEntity();
         entity.setName(request.name());
         entity.setDescription(request.description());

@@ -1,7 +1,7 @@
 package com.e_commerce.app.data.repositories.cart;
 
 
-import com.e_commerce.app.data.entities.cart.CartItemEntity;
+import com.e_commerce.app.domain.entities.cart.CartItemEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

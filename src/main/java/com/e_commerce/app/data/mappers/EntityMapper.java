@@ -1,17 +1,17 @@
 package com.e_commerce.app.data.mappers;
 
-import com.e_commerce.app.data.dto.cart.CartItemResponse;
-import com.e_commerce.app.data.dto.cart.CartResponse;
-import com.e_commerce.app.data.dto.categories.CategoryResponse;
-import com.e_commerce.app.data.dto.order.OrderItemResponse;
-import com.e_commerce.app.data.dto.order.OrderResponse;
-import com.e_commerce.app.data.dto.product.ProductResponse;
-import com.e_commerce.app.data.entities.cart.CartEntity;
-import com.e_commerce.app.data.entities.cart.CartItemEntity;
-import com.e_commerce.app.data.entities.category.CategoryEntity;
-import com.e_commerce.app.data.entities.order.OrderEntity;
-import com.e_commerce.app.data.entities.order.OrderItemEntity;
-import com.e_commerce.app.data.entities.product.ProductEntity;
+import com.e_commerce.app.business.dto.cart.CartItemResponse;
+import com.e_commerce.app.business.dto.cart.CartResponse;
+import com.e_commerce.app.business.dto.categories.CategoryResponse;
+import com.e_commerce.app.business.dto.order.OrderItemResponse;
+import com.e_commerce.app.business.dto.order.OrderResponse;
+import com.e_commerce.app.business.dto.product.ProductResponse;
+import com.e_commerce.app.domain.entities.cart.CartEntity;
+import com.e_commerce.app.domain.entities.cart.CartItemEntity;
+import com.e_commerce.app.domain.entities.category.CategoryEntity;
+import com.e_commerce.app.domain.entities.order.OrderEntity;
+import com.e_commerce.app.domain.entities.order.OrderItemEntity;
+import com.e_commerce.app.domain.entities.product.ProductEntity;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -55,11 +55,11 @@ public class EntityMapper {
                 .toList();
 
         BigDecimal total = items.stream()
-                .map(CartItemResponse::getSubtotal)
+                .map(CartItemResponse::subtotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         int totalItems = items.stream()
-                .mapToInt(CartItemResponse::getQuantity)
+                .mapToInt(CartItemResponse::quantity)
                 .sum();
 
         return CartResponse.builder()
@@ -89,6 +89,7 @@ public class EntityMapper {
         List<OrderItemResponse> items = order.getItems().stream()
                 .map(this::toOrderItemResponse)
                 .toList();
+
         return OrderResponse.builder()
                 .id(order.getId())
                 .status(order.getStatus())

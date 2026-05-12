@@ -1,10 +1,10 @@
 package com.e_commerce.app.controllers;
 
-import com.e_commerce.app.data.dto.order.OrderRequest;
-import com.e_commerce.app.data.dto.order.OrderResponse;
-import com.e_commerce.app.data.enums.OrderStatus;
+import com.e_commerce.app.business.dto.order.OrderRequest;
+import com.e_commerce.app.business.dto.order.OrderResponse;
+import com.e_commerce.app.domain.enums.OrderStatus;
 import com.e_commerce.app.data.mappers.EntityMapper;
-import com.e_commerce.app.data.services.order.OrderService;
+import com.e_commerce.app.business.services.order.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;

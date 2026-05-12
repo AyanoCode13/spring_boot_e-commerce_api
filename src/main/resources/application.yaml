@@ -65,6 +65,12 @@ security:              # ← root level, not spring.security
     secret-key: ${JWT_SECRET}
     access-token-expiration: ${JWT_ACCESS_TOKEN_EXPIRATION:900000}
     refresh-token-expiration: ${JWT_REFRESH_TOKEN_EXPIRATION:604800000}
+  oauth2:
+    resourceserver:
+      jwt:
+        issuer-uri: https://accounts.google.com
+        jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
+
 logging:
   level:
     org.springframework.security: DEBUG
@@ -79,3 +85,5 @@ management:
   endpoint:
     health:
       show-details: when-authorized
+      #SECERT: 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
+      #ID: 997401268996-0m9m2t8fq89rpmeer23h4h5tvh3crl3i.apps.googleusercontent.com

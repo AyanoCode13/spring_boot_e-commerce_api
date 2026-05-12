@@ -1,6 +1,6 @@
 package com.e_commerce.app.data.generators;
 
-import com.e_commerce.app.data.dto.product.ProductFilterRequest;
+import com.e_commerce.app.business.dto.product.ProductFilterRequest;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.stereotype.Component;
 

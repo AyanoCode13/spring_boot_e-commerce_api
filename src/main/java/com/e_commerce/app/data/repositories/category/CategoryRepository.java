@@ -1,7 +1,7 @@
 package com.e_commerce.app.data.repositories.category;
 
 
-import com.e_commerce.app.data.entities.category.CategoryEntity;
+import com.e_commerce.app.domain.entities.category.CategoryEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

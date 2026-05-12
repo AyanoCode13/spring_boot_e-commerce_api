@@ -1,12 +1,12 @@
 package com.e_commerce.app.controllers;
 
 
-import com.e_commerce.app.data.dto.product.ProductFilterRequest;
-import com.e_commerce.app.data.dto.product.ProductRequest;
-import com.e_commerce.app.data.dto.product.ProductResponse;
-import com.e_commerce.app.data.entities.product.ProductEntity;
+import com.e_commerce.app.business.dto.product.ProductFilterRequest;
+import com.e_commerce.app.business.dto.product.ProductRequest;
+import com.e_commerce.app.business.dto.product.ProductResponse;
+import com.e_commerce.app.domain.entities.product.ProductEntity;
 import com.e_commerce.app.data.mappers.EntityMapper;
-import com.e_commerce.app.data.services.product.ProductService;
+import com.e_commerce.app.business.services.product.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -50,11 +50,11 @@ public class ProductController {
     public ResponseEntity<ProductResponse> create(@Valid @RequestBody ProductRequest request) {
 
         ProductEntity product = ProductEntity.builder()
-                .name(request.getName())
-                .description(request.getDescription())
-                .price(request.getPrice())
-                .stockQuantity(request.getStockQuantity())
-                .imageUrl(request.getImageUrl())
+                .name(request.name())
+                .description(request.description())
+                .price(request.price())
+                .stockQuantity(request.stockQuantity())
+                .imageUrl(request.imageUrl())
 
                 .build();
         return ResponseEntity.ok(mapper.toProductResponse(productService.create(product)));
@@ -68,11 +68,11 @@ public class ProductController {
             @Valid @RequestBody ProductRequest request) {
 
         ProductEntity updated = ProductEntity.builder()
-                .name(request.getName())
-                .description(request.getDescription())
-                .price(request.getPrice())
-                .stockQuantity(request.getStockQuantity())
-                .imageUrl(request.getImageUrl())
+                .name(request.name())
+                .description(request.description())
+                .price(request.price())
+                .stockQuantity(request.stockQuantity())
+                .imageUrl(request.imageUrl())
 
                 .build();
         return ResponseEntity.ok(mapper.toProductResponse(productService.update(id, updated)));

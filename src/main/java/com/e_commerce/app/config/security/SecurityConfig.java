@@ -1,9 +1,11 @@
 package com.e_commerce.app.config.security;
 
-import com.e_commerce.app.data.services.auth.UserDetailsServiceImpl;
+import com.e_commerce.app.business.services.auth.UserDetailsServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.*;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -13,13 +15,26 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2Error;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidatorResult;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtValidators;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.*;
 
+import java.util.Collections;
 import java.util.List;
+
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
 @EnableWebSecurity
@@ -32,6 +47,25 @@ public class SecurityConfig {
     private final AuthRateLimitFilter authRateLimitFilter;
 
     @Bean
+    @Order(1)
+    public SecurityFilterChain googleFilterChain(HttpSecurity http) throws Exception {
+        http
+                .securityMatcher("/api/auth/google")
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(s -> s.sessionCreationPolicy(STATELESS))
+                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt
+                                .jwkSetUri("https://www.googleapis.com/oauth2/v3/certs")
+                                // inline decoder — not exposed as a @Bean
+                                .decoder(googleJwtDecoder())
+                        )
+                );
+        return http.build();
+    }
+
+    @Bean
+    @Order(2)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .logout(logout -> logout
@@ -41,11 +75,12 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID")              // clear cookies
                         .clearAuthentication(true)
                 )
+
                 .addFilterBefore(authRateLimitFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        session.sessionCreationPolicy(STATELESS)
                 )
                 .headers(headers -> headers
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
@@ -111,4 +146,18 @@ public class SecurityConfig {
             AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
+
+    private JwtDecoder googleJwtDecoder() {
+        NimbusJwtDecoder decoder = NimbusJwtDecoder
+                .withJwkSetUri("https://www.googleapis.com/oauth2/v3/certs")
+                .build();
+
+        OAuth2TokenValidator<Jwt> withIssuer =
+                JwtValidators.createDefaultWithIssuer("https://accounts.google.com");
+
+        decoder.setJwtValidator(withIssuer);
+        return decoder;
+    }
+
 }

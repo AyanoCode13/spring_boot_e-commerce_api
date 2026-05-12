@@ -1,6 +1,5 @@
 package com.e_commerce.app.config.security;
 
-
 import com.e_commerce.app.business.services.auth.JwtService;
 import com.e_commerce.app.business.services.auth.TokenBlacklistService;
 import com.e_commerce.app.business.services.auth.UserDetailsServiceImpl;
@@ -8,9 +7,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Base64;
+
 
 @Slf4j
 @Component
@@ -32,23 +31,26 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final TokenBlacklistService blacklistService;
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request,
-                                    @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain)
+    protected void doFilterInternal(@NotNull HttpServletRequest request,
+                                    @NotNull HttpServletResponse response,
+                                    @NotNull FilterChain filterChain)
             throws ServletException, IOException {
 
         final String authHeader = request.getHeader("Authorization");
-        String token = extractToken(request);
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
-        if (token != null && blacklistService.isBlacklisted(token)) {
+
+        final String token = authHeader.substring(7);
+
+        if (blacklistService.isBlacklisted(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
-            response.getWriter().write("{\"message\":\"Token has been invalidated\",\"status\":401}");
-            response.getWriter().flush();
+            response.getWriter().write("""
+            {"message":"Token has been invalidated","status":401}
+        """);
             return;
         }
 
@@ -126,23 +128,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String extractToken(HttpServletRequest request) {
-        String header = request.getHeader("Authorization");
-
-        if (header != null && header.startsWith("Bearer ")) {
-            return header.substring(7); // REMOVE "Bearer "
-        }
-
-        return null;
-    }
-
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.equals("/api/auth/login")
-                || path.equals("/api/auth/register")
-                || path.equals("/api/auth/logout")
-                || path.equals("/api/auth/google");
+        log.error("PATH = {}", path);
+
+        return path.startsWith("api/auth");
     }
 
 }

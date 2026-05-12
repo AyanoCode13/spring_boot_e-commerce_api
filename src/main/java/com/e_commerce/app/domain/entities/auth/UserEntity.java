@@ -3,6 +3,7 @@ package com.e_commerce.app.domain.entities.auth;
 
 import com.e_commerce.app.domain.entities.cart.CartEntity;
 import com.e_commerce.app.domain.entities.order.OrderEntity;
+import com.e_commerce.app.domain.enums.AuthProvider;
 import com.e_commerce.app.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,6 +40,9 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<OrderEntity> orders;

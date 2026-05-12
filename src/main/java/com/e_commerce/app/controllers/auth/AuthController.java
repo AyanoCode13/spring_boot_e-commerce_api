@@ -9,6 +9,8 @@ import com.e_commerce.app.business.services.auth.TokenBlacklistService;
 import com.e_commerce.app.config.security.CurrentUser;
 import com.e_commerce.app.data.repositories.auth.UserRepository;
 import com.e_commerce.app.domain.entities.auth.UserEntity;
+import com.e_commerce.app.domain.enums.AuthProvider;
+import com.e_commerce.app.domain.enums.Role;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -16,9 +18,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+@Slf4j
 @Tag(name = "Auth", description = "Register and login endpoints")
 @RestController
 @RequestMapping("/api/auth")
@@ -35,31 +42,6 @@ public class AuthController {
 
     private final AuthService authService;
     private final TokenBlacklistService blacklistService;
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private CurrentUser currentUser;
-
-    @PostMapping("/google")
-    public ResponseEntity<?> loginWithGoogle(JwtAuthenticationToken token) {
-        String email   = currentUser.getEmail(token);
-        String name    = currentUser.getName(token);
-        String picture = currentUser.getPicture(token);
-
-        UserEntity user = userRepository.findByEmail(email)
-                .orElseGet(() -> userRepository.save(
-                       UserEntity.builder().email(email).firstName(name).build()
-                ));
-
-        String appToken = authService.jwtService.generateToken(email);
-
-        return ResponseEntity.ok(Map.of(
-                "token", appToken,
-                "user", user
-        ));
-    }
-
 
 
 
